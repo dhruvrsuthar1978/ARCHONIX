@@ -30,10 +30,6 @@ export function AuthForm({ mode = 'login' }) {
     });
     const submit = async (values) => {
         setServerError(undefined);
-        if (mode === 'forgot') {
-            setServerError('Password reset is not available yet.');
-            return;
-        }
         try {
             const { data } = mode === 'signup'
                 ? await api.post('/api/auth/register', {
@@ -58,22 +54,12 @@ export function AuthForm({ mode = 'login' }) {
         }
     };
     if (mode === 'forgot') {
-        return (<form onSubmit={handleSubmit(submit)} className="space-y-5">
-        {serverError ? <p role="alert" className="text-sm text-blueprint-danger">{serverError}</p> : null}
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-xs text-slate-300">Work email</Label>
-          <Input id="email" type="email" {...register('email')} placeholder="you@studio.co" className="h-11 rounded-lg border-slate-700 bg-slate-900 text-sm text-white placeholder:text-slate-600"/>
-          {errors.email ? <p className="text-xs text-blueprint-danger">{errors.email.message}</p> : null}
-        </div>
-
-        <Button className="h-11 w-full rounded-lg bg-blueprint-accent text-sm text-white hover:bg-blue-500" disabled={isSubmitting}>
-          {isSubmitting ? <Loader2 className="size-4 animate-spin"/> : 'Send reset link'}
-        </Button>
-
+        return (<div className="space-y-5">
+        <p role="status" className="text-sm leading-6 text-slate-400">Password reset is not configured. Contact your workspace administrator for help.</p>
         <p className="text-center text-xs text-slate-500">
           <Link href="/login" className="text-blueprint-cyan hover:text-white">Back to sign in</Link>
         </p>
-      </form>);
+      </div>);
     }
     return (<form onSubmit={handleSubmit(submit)} className="space-y-5">
       {mode === 'signup' ? (<div className="space-y-2">
